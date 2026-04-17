@@ -1,319 +1,477 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  ArrowRight,
-  Building2,
-  Home,
-  Store,
-  Landmark,
-  Warehouse,
-  ChevronRight,
-} from "lucide-react";
-
-// ─── Data ────────────────────────────────────────────────────────────────────
-
-const steps = [
-  {
-    num: "01",
-    title: "Asset submitted",
-    desc: "Owners submit their hotel or property. We run legal and financial checks before listing.",
-  },
-  {
-    num: "02",
-    title: "SPV created",
-    desc: "A dedicated company is registered for the asset. You buy shares in that company.",
-  },
-  {
-    num: "03",
-    title: "Offer listed",
-    desc: "The asset goes live with an investment memo and projected monthly income.",
-  },
-  {
-    num: "04",
-    title: "Monthly distributions",
-    desc: "Rent is collected and your share of profit is sent to you every single month.",
-  },
-];
-
-const assets = [
-  { icon: Building2, label: "Hotels" },
-  { icon: Home, label: "Kiray homes" },
-  { icon: Store, label: "Shops" },
-  { icon: Landmark, label: "Land leases" },
-  { icon: Warehouse, label: "Warehouses" },
-];
-
-const stats = [
-  { num: "40%", label: "Max equity offered" },
-  { num: "2%", label: "Fundraising fee" },
-  { num: "5%", label: "Management spread" },
-  { num: "3.25M", label: "Projected Birr/yr" },
-];
-
-const problems = [
-  {
-    who: "Asset owners",
-    what: "Can't access liquidity without selling the entire property.",
-  },
-  {
-    who: "Investors",
-    what: "No easy way to earn passive income from local real estate.",
-  },
-  {
-    who: "The market",
-    what: "Billions in idle wealth sitting in brick and mortar.",
-  },
-];
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
+import React, { useState } from "react";
 
 export default function LandingPage() {
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: "smooth" });
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Simulate API call to mesobaiprojects@gmail.com
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+    }, 1200);
+  };
+
+  const theme = {
+    bg: isDarkMode ? "#000" : "#fff",
+    text: isDarkMode ? "#fff" : "#000",
+    secondaryText: isDarkMode ? "#888" : "#666",
+    border: isDarkMode ? "#222" : "#e5e5e5",
+    highlight: "#00ff88",
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans antialiased selection:bg-teal-100">
+    <div
+      style={{
+        fontFamily: "ui-sans-serif, system-ui, -apple-system, sans-serif",
+        color: theme.text,
+        backgroundColor: theme.bg,
+        lineHeight: "1.5",
+        fontSize: "12px",
+        letterSpacing: "-0.01em",
+        minHeight: "100vh",
+        transition: "background-color 0.2s ease",
+      }}
+    >
       {/* ── Nav ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-slate-100 bg-white/80 backdrop-blur-md">
-        <div className="mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
-          <span
-            className="text-lg font-bold tracking-tight cursor-pointer"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
-            Mesob<span className="text-teal-600">AI</span>
-          </span>
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-500">
-            <button
-              onClick={() => scrollToSection("how")}
-              className="hover:text-teal-600 transition-colors"
-            >
-              How it works
-            </button>
-            <button
-              onClick={() => scrollToSection("assets")}
-              className="hover:text-teal-600 transition-colors"
-            >
-              Assets
-            </button>
-            <button
-              onClick={() => scrollToSection("waitlist")}
-              className="hover:text-teal-600 transition-colors"
-            >
-              Join waitlist
-            </button>
-          </nav>
-          <Button
-            size="sm"
-            className="bg-teal-600 hover:bg-teal-700 text-white rounded-full px-5"
-            onClick={() => scrollToSection("waitlist")}
-          >
-            Early Access
-          </Button>
+      <nav
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "20px 40px",
+          borderBottom: `1px solid ${theme.border}`,
+          position: "sticky",
+          top: 0,
+          backgroundColor: theme.bg,
+          zIndex: 100,
+        }}
+      >
+        <div style={{ textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          Mesob Asset Management
         </div>
-      </header>
-
-      <main>
-        {/* ── Hero ── */}
-        <section className="relative min-h-[85vh] flex flex-col justify-center pt-20 pb-16 px-6 overflow-hidden">
-          {/* subtle grid for light mode */}
-          <div
-            className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        <div style={{ display: "flex", gap: "25px", alignItems: "center" }}>
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
             style={{
-              backgroundImage:
-                "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
+              background: "none",
+              border: `1px solid ${theme.border}`,
+              fontSize: "9px",
+              textTransform: "uppercase",
+              padding: "2px 6px",
+              cursor: "pointer",
+              color: theme.text,
             }}
-          />
+          >
+            {isDarkMode ? "Light" : "Black"}
+          </button>
+          <span style={{ color: theme.secondaryText }}>አማርኛ</span>
+          <span
+            style={{ border: `1px solid ${theme.text}`, padding: "3px 10px" }}
+          >
+            Portal
+          </span>
+        </div>
+      </nav>
 
-          <div className="relative mx-auto max-w-6xl w-full">
-            <Badge
-              variant="secondary"
-              className="mb-6 border-transparent text-teal-700 bg-teal-50 text-[10px] uppercase tracking-widest py-1 px-3"
+      <main
+        style={{ padding: "80px 40px", maxWidth: "1200px", margin: "0 auto" }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.2fr 0.8fr",
+            gap: "100px",
+          }}
+        >
+          <section>
+            <div
+              style={{
+                color: theme.secondaryText,
+                marginBottom: "20px",
+                fontSize: "10px",
+                textTransform: "uppercase",
+              }}
             >
-              Addis Ababa, Ethiopia
-            </Badge>
+              Asset Fractionalization / Pilot 01
+            </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 leading-[1.2] max-w-3xl">
-              Own a piece of <span className="text-teal-600">real assets.</span>
-              <br />
-              Earn monthly income.
+            <h1
+              style={{
+                fontSize: "26px",
+                fontWeight: "400",
+                margin: "0 0 30px 0",
+                maxWidth: "550px",
+                lineHeight: "1.2",
+              }}
+            >
+              Direct ownership of high-yield Ethiopian assets. Unlock property
+              liquidity via legal SPV structures.
             </h1>
 
-            <p className="mt-6 text-slate-500 text-lg max-w-xl leading-relaxed font-normal">
-              Mesob AI enables fractional ownership of hotels, shops, and
-              properties across Ethiopia. Start small, earn big.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 mt-10">
-              <Button
-                size="lg"
-                className="bg-teal-600 hover:bg-teal-700 text-white rounded-full gap-2 h-12 px-8 shadow-lg shadow-teal-600/20"
-                onClick={() => scrollToSection("waitlist")}
-              >
-                Join the waitlist <ArrowRight className="w-4 h-4" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-slate-200 text-slate-600 hover:bg-slate-50 rounded-full gap-1.5 h-12"
-                onClick={() => scrollToSection("how")}
-              >
-                Learn more
-              </Button>
-            </div>
-
-            <div className="mt-20 pt-10 border-t border-slate-100 grid grid-cols-2 lg:grid-cols-4 gap-8">
-              {stats.map((s) => (
-                <div key={s.label}>
-                  <div className="text-2xl font-bold text-slate-900">
-                    {s.num}
-                  </div>
-                  <div className="text-xs font-medium text-slate-400 uppercase tracking-wider mt-1">
-                    {s.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Problem ── */}
-        <section className="bg-slate-50 px-6 py-24">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mb-12 text-center md:text-left">
-              The Problem <span className="text-teal-600">&</span> Opportunity
-            </h2>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              {problems.map((p) => (
-                <Card
-                  key={p.who}
-                  className="bg-white border-slate-200/60 shadow-sm rounded-2xl hover:shadow-md transition-shadow"
-                >
-                  <CardContent className="p-8">
-                    <div className="text-sm font-bold text-teal-600 mb-4 uppercase tracking-widest">
-                      {p.who}
-                    </div>
-                    <div className="text-slate-600 text-sm leading-relaxed">
-                      {p.what}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── How it works ── */}
-        <section id="how" className="px-6 py-24 scroll-mt-20">
-          <div className="mx-auto max-w-6xl text-center">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mb-4">
-              How Mesob AI Works
-            </h2>
-            <p className="text-slate-500 mb-16">Simple. Legal. Transparent.</p>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {steps.map((step) => (
-                <div key={step.num} className="text-left group">
-                  <div className="text-4xl font-black text-slate-100 group-hover:text-teal-50 transition-colors mb-4">
-                    {step.num}
-                  </div>
-                  <div className="text-base font-bold text-slate-900 mb-2">
-                    {step.title}
-                  </div>
-                  <div className="text-sm text-slate-500 leading-relaxed">
-                    {step.desc}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Asset types ── */}
-        <section
-          id="assets"
-          className="bg-slate-900 text-white px-6 py-24 scroll-mt-20"
-        >
-          <div className="mx-auto max-w-6xl text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-12">
-              Supported Assets
-            </h2>
-            <div className="flex flex-wrap justify-center gap-4">
-              {assets.map(({ icon: Icon, label }) => (
-                <div
-                  key={label}
-                  className="bg-white/5 border border-white/10 px-6 py-4 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-colors"
-                >
-                  <Icon className="w-5 h-5 text-teal-400" />
-                  <span className="text-sm font-medium">{label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Waitlist ── */}
-        <section
-          id="waitlist"
-          className="bg-white px-6 py-32 scroll-mt-20 border-t border-slate-100"
-        >
-          <div className="mx-auto max-w-xl text-center">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
-              Ready to invest?
-            </h2>
-            <p className="mt-4 text-slate-500">
-              Join the early bird list for exclusive first access to our
-              upcoming property drops.
-            </p>
-
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Welcome to the Mesob AI waitlist!");
+            {/* Added Section per your request */}
+            <p
+              style={{
+                color: theme.text,
+                opacity: 0.7,
+                marginBottom: "40px",
+                maxWidth: "480px",
               }}
-              className="mt-10 flex flex-col sm:flex-row gap-2"
             >
-              <Input
-                type="email"
-                required
-                placeholder="Enter your email"
-                className="h-12 border-slate-200 rounded-full px-6 focus-visible:ring-teal-600"
-              />
-              <Button
-                type="submit"
-                className="h-12 bg-teal-600 hover:bg-teal-700 text-white rounded-full px-8 font-bold"
+              Mesob facilitates the transition of physical real estate into
+              liquid shares. We manage the legal formation of Special Purpose
+              Vehicles (SPVs) to distribute monthly rental income to verified
+              investors.
+            </p>
+
+            <div
+              style={{
+                border: `1px solid ${theme.border}`,
+                padding: "30px",
+                maxWidth: "420px",
+                minHeight: "140px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              {!submitted ? (
+                <>
+                  <div style={{ marginBottom: "15px" }}>
+                    Request Investor Access
+                  </div>
+                  <form
+                    onSubmit={handleSubmit}
+                    style={{ display: "flex", gap: "8px" }}
+                  >
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Email Address"
+                      style={{
+                        flex: 1,
+                        padding: "10px",
+                        border: `1px solid ${theme.border}`,
+                        backgroundColor: "transparent",
+                        color: theme.text,
+                        fontSize: "12px",
+                        outline: "none",
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      style={{
+                        backgroundColor: theme.text,
+                        color: theme.bg,
+                        border: "none",
+                        padding: "10px 20px",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {loading ? "Processing..." : "Submit"}
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <div>
+                  <div
+                    style={{
+                      color: theme.highlight,
+                      marginBottom: "10px",
+                      fontSize: "10px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Registration Received
+                  </div>
+                  <div style={{ fontSize: "14px", marginBottom: "5px" }}>
+                    Verification in progress.
+                  </div>
+                  <div style={{ color: theme.secondaryText }}>
+                    The Phase 1 prospectus will be sent to{" "}
+                    <strong>{email}</strong>.
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+
+          <aside
+            style={{
+              borderLeft: `1px solid ${theme.border}`,
+              paddingLeft: "40px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "10px",
+                color: theme.secondaryText,
+                marginBottom: "25px",
+                textTransform: "uppercase",
+              }}
+            >
+              Market Performance / Yield Data
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-end",
+                gap: "3px",
+                height: "60px",
+                marginBottom: "20px",
+              }}
+            >
+              {[15, 25, 22, 40, 55, 48, 70, 95].map((val, i) => (
+                <div
+                  key={i}
+                  style={{
+                    flex: 1,
+                    backgroundColor: i === 7 ? theme.highlight : theme.border,
+                    height: `${val}%`,
+                  }}
+                />
+              ))}
+            </div>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "15px" }}
+            >
+              <div
+                style={{
+                  borderBottom: `1px solid ${theme.border}`,
+                  paddingBottom: "8px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
               >
-                Get Access
-              </Button>
-            </form>
+                <span style={{ color: theme.secondaryText }}>
+                  Annual Rental Yield
+                </span>
+                <span>14.2%</span>
+              </div>
+              <div
+                style={{
+                  borderBottom: `1px solid ${theme.border}`,
+                  paddingBottom: "8px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span style={{ color: theme.secondaryText }}>
+                  Capital Liquidity
+                </span>
+                <span>T+5 Days</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        {/* ── Startup Brief ── */}
+        <section
+          style={{
+            marginTop: "100px",
+            borderTop: `1px solid ${theme.border}`,
+            paddingTop: "40px",
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr",
+              gap: "60px",
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  color: theme.secondaryText,
+                  marginBottom: "10px",
+                  textTransform: "uppercase",
+                  fontSize: "10px",
+                }}
+              >
+                01 / Our Mission
+              </div>
+              <div
+                style={{
+                  height: "40px",
+                  border: `1px solid ${theme.border}`,
+                  marginBottom: "15px",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "0 10px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "20%",
+                    height: "2px",
+                    backgroundColor: theme.highlight,
+                  }}
+                ></div>
+                <div style={{ fontSize: "8px", margin: "0 5px" }}>ASSET</div>
+                <div
+                  style={{
+                    flex: 1,
+                    height: "1px",
+                    borderTop: `1px dashed ${theme.border}`,
+                  }}
+                ></div>
+                <div style={{ fontSize: "8px", margin: "0 5px" }}>
+                  MESOB_SPV
+                </div>
+                <div
+                  style={{
+                    flex: 1,
+                    height: "1px",
+                    borderTop: `1px dashed ${theme.border}`,
+                  }}
+                ></div>
+                <div style={{ fontSize: "8px", margin: "0 5px" }}>INVESTOR</div>
+              </div>
+              <p style={{ margin: 0, opacity: 0.8 }}>
+                Building the digital infrastructure for Ethiopia's real estate
+                economy.
+              </p>
+            </div>
+
+            <div>
+              <div
+                style={{
+                  color: theme.secondaryText,
+                  marginBottom: "10px",
+                  textTransform: "uppercase",
+                  fontSize: "10px",
+                }}
+              >
+                02 / Strategic Focus
+              </div>
+              <div
+                style={{
+                  height: "40px",
+                  marginBottom: "15px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  gap: "4px",
+                }}
+              >
+                <div style={{ display: "flex", width: "100%", height: "8px" }}>
+                  <div
+                    style={{ width: "70%", backgroundColor: theme.text }}
+                  ></div>
+                  <div
+                    style={{
+                      width: "30%",
+                      backgroundColor: theme.border,
+                      marginLeft: "2px",
+                    }}
+                  ></div>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: "8px",
+                    color: theme.secondaryText,
+                  }}
+                >
+                  <span>70% HOSPITALITY</span>
+                  <span>30% RETAIL</span>
+                </div>
+              </div>
+              <p style={{ margin: 0, opacity: 0.8 }}>
+                Leveraging technology to formalize informal real estate wealth.
+              </p>
+            </div>
+
+            <div>
+              <div
+                style={{
+                  color: theme.secondaryText,
+                  marginBottom: "10px",
+                  textTransform: "uppercase",
+                  fontSize: "10px",
+                }}
+              >
+                03 / Operational Phase
+              </div>
+              <div
+                style={{
+                  height: "40px",
+                  marginBottom: "15px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "10px",
+                    height: "10px",
+                    backgroundColor: theme.highlight,
+                  }}
+                ></div>
+                <div
+                  style={{
+                    height: "1px",
+                    flex: 1,
+                    backgroundColor: theme.border,
+                  }}
+                ></div>
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    border: `1px solid ${theme.border}`,
+                  }}
+                ></div>
+                <div
+                  style={{
+                    height: "1px",
+                    flex: 1,
+                    backgroundColor: theme.border,
+                  }}
+                ></div>
+                <div
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    border: `1px solid ${theme.border}`,
+                  }}
+                ></div>
+              </div>
+              <p style={{ margin: 0, opacity: 0.8 }}>
+                Phase 1 (Pilot) is active. Sourcing one flagship asset for model
+                validation.
+              </p>
+            </div>
           </div>
         </section>
       </main>
 
-      <footer className="px-6 py-12 border-t border-slate-50 bg-slate-50/50">
-        <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <span className="text-lg font-bold">
-            Mesob<span className="text-teal-600">AI</span>
-          </span>
-          <p className="text-xs text-slate-400">
-            © {new Date().getFullYear()} Mesob AI. Addis Ababa, Ethiopia.
-          </p>
-          <div className="flex gap-8 text-xs font-semibold text-slate-500">
-            <a href="#" className="hover:text-teal-600">
-              Privacy
-            </a>
-            <a href="#" className="hover:text-teal-600">
-              Terms
-            </a>
-          </div>
-        </div>
+      <footer
+        style={{
+          marginTop: "60px",
+          padding: "30px 40px",
+          borderTop: `1px solid ${theme.border}`,
+          display: "flex",
+          justifyContent: "space-between",
+          color: theme.secondaryText,
+          fontSize: "11px",
+        }}
+      >
+        <div>© 2026 MESOB ASSET. ADDIS ABABA, ETHIOPIA.</div>
+        <div>{submitted && "SYSTEM_STATUS: LOGGED"}</div>
       </footer>
     </div>
   );
